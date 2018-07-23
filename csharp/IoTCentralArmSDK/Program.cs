@@ -9,11 +9,38 @@ namespace IoTCentralArmSDK
     {
         static void Main(string[] args)
         {
-            var creds = new Microsoft.Rest.ServiceClientCredentials()
+            // Access token from the azure-cli
+            // az account get-access-token
+            var token = "";
+            var subscriptionId = "";
+            var creds = new TokenCredentials(token, "Bearer");
 
-            var client = new IotCentralClient()
+            var client = new IotCentralClient(creds);
+            var skuInfo = new AppSkuInfo("S1");
+            var app = new App("West Us", skuInfo);
+            client.SubscriptionId = subscriptionId;
 
-            var app = new App();
+            var name = "csharp-test-app";
+            var resourceGroup = "myResourceGroup";
+
+            app.Location = "West Us";
+            app.Subdomain = name;
+            app.DisplayName = name;
+
+            Console.WriteLine("Creating app");
+            var resultApp = client.Apps.CreateOrUpdate(resourceGroup, name, app);
+
+            Console.WriteLine("Listing apps");
+            foreach (var currentApp in client.Apps.ListByResourceGroup(resourceGroup))
+            {
+                Console.WriteLine($"{currentApp.DisplayName} ({currentApp.Id})");
+            }
+
+            Console.WriteLine(Environment.NewLine);
+            Console.WriteLine("Removing app");
+            client.Apps.Delete(resourceGroup, name);
+
+            Console.WriteLine("Done");
         }
     }
 }
