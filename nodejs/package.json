@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "azure-arm-iotcentral": "^1.0.0-preview"
+    "azure-arm-iotcentral": "^1.0.1-preview"
   }
 }

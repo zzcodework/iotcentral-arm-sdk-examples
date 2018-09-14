@@ -1,38 +1,43 @@
 const msRestAzure = require("ms-rest-azure");
 const IotCentralClient = require("azure-arm-iotcentral");
-msRestAzure.interactiveLogin().then((creds) => {
+
+async function run() {
+    const creds = await msRestAzure.interactiveLogin();
+
     const subscriptionId = "FILL IN SUB ID";
-    const resourceGroupName = "iotresourcegroup";
-    const resourceName = "iot-central-test-app";
+    const resourceGroupName = "myResourceGroup";
+    const resourceName = "my-app-name";
 
     const client = new IotCentralClient(creds, subscriptionId);
 
     const app = {
         subdomain: resourceName,
         sku: {
-            name: 'F1'
+            name: 'S1'
         },
         location: 'West Us',
         displayName: resourceName
     };
 
-    return client.apps.checkNameAvailability(resourceName).then((result) => {
-        console.log(result);
-    });
+    // Check if a name exists
+    let result = await client.apps.checkNameAvailability(resourceName);
+    console.log(result);
 
-    return client.apps.createOrUpdate(resourceGroupName, resourceName, app).then((result) => {
-        console.log(result);
-    });
+    // Create a new app
+    result = await client.apps.createOrUpdate(resourceGroupName, resourceName, app);
+    console.log(result);
 
-    return client.apps.get(resourceGroupName, resourceName).then((result) => {
-      console.log(result);
-    });
+    // Retrieve an app
+    result = await client.apps.get(resourceGroupName, resourceName);
+    console.log(result);
 
-    // return client.apps.deleteMethod(resourceGroupName, resourceName).then((result) => {
-    //     console.log("The result is:");
-    //     console.log(result);
-    // });
+    // Delete the app
+    // result = await client.apps.deleteMethod(resourceGroupName, resourceName)
+    // console.log(result);
+}
 
+run().then(() => {
+    console.log('done');
 }).catch((err) => {
     console.log('An error occurred:');
     console.dir(err, {
