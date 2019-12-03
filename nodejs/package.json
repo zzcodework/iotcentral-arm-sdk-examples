@@ -4,12 +4,15 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "armTemplate": "tsc && node ./dist/armTemplate.js"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
         "@azure/arm-iotcentral": "^2.1.0",
-        "@azure/ms-rest-nodeauth": "^2.0.5"
+        "@azure/ms-rest-nodeauth": "^2.0.5",
+        "azure-arm-resource": "^7.3.0",
+        "ms-rest-azure": "^3.0.0"
     }
 }
